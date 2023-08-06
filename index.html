@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="theme-color" content="#D65108"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="icon" href="favicon.ico">
     <meta charset="utf8">
     <style>
         html, body {
@@ -31,9 +32,10 @@
             background: rgb(77 77 72 / 60%);
             backdrop-filter: blur(6px);
             padding: 40px;
-            margin: 20px;
+            margin: 80px;
             display: flex;
             align-items: center;
+            border-radius: 10px;
         }
 
         #dialogBox > * {
@@ -43,6 +45,7 @@
         #dialogBox svg {
             display: block;
             max-height: 15em;
+            border-radius: 10px;
         }
 
         @media (max-width: 500px) {
@@ -97,26 +100,39 @@
 
         .lang-picker {
             position: fixed;
-            top: 0;
-            right: 0;
-            background: white;
-            padding: 5px;
-            color: black
+            top: 10px;
+            right: 10px;
+            background: rgb(255 255 255 / 30%);
+            padding: 10px;
+            color: black;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            width: 50px;
+            justify-content: center;
         }
 
         .flag {
             font-size: 20px;
+            transition: all .5s;
+            margin: 4px;
+        }
+
+        .flag.active {
+            text-shadow: #FFF 0px 0px 5px, #FFF 0px 0px 10px, #FFF 0px 0px 15px, #FF2D95 0px 0px 20px, #FF2D95 0px 0px 30px, #FF2D95 0px 0px 40px, #FF2D95 0px 0px 50px, #FF2D95 0px 0px 75px;
         }
 
         .flag:hover {
             cursor: pointer;
+            transform: scale(140%);
+            font-size: 25px;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.32.0/tsparticles.min.js"></script>
 </head>
 <body>
 <div class="lang-picker">
-    <span class="flag" data-lang="de">🇩🇪</span> | <span class="flag" data-lang="en">🇬🇧</span>
+    <span class="flag" data-lang="de">🇩🇪</span> <span class="flag" data-lang="en">🇬🇧</span>
 </div>
 <!-- tsParticles container -->
 <div id="particles"></div>
@@ -179,6 +195,16 @@
         document.querySelectorAll(".content-div")
             .forEach(el => el.classList.add("hidden"));
         contentElement.classList.remove("hidden");
+
+        document.querySelectorAll(`.flag`)
+            .forEach(el => {
+                const flagLanguage = el.dataset.lang;
+                if (language === flagLanguage) {
+                    el.classList.add("active");
+                } else {
+                    el.classList.remove("active");
+                }
+            });
     };
 
     document.addEventListener("DOMContentLoaded", () => {
