@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>D33pWeb</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="theme-color" content="#D65108"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta charset="utf8">
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            height: 100%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        canvas {
+            display: block;
+            vertical-align: bottom;
+        }
+
+        #dialogBox {
+            background: rgb(77 77 72 / 60%);
+            backdrop-filter: blur(6px);
+            padding: 40px;
+            margin: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        #dialogBox > * {
+            margin: 10px;
+        }
+
+        #dialogBox svg {
+            display: block;
+            max-height: 15em;
+        }
+
+        @media (max-width: 500px) {
+            #dialogBox {
+                flex-direction: column;
+            }
+        }
+
+        a, .rainbow-text {
+            text-decoration: none;
+            background-image: linear-gradient(to left, violet, #7e24c0, #9999e2, green, yellow, orange, red);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        blockquote {
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            padding-left: 10px;
+            border-left: 5px solid #ccc;
+            quotes: "\201C" "\201D" "\2018" "\2019";
+        }
+
+        blockquote:before {
+            color: #ccc;
+            content: open-quote;
+            font-size: 4em;
+            line-height: 0.1em;
+            margin-right: 0.25em;
+            vertical-align: -0.4em;
+        }
+
+        blockquote p {
+            display: inline;
+        }
+
+        blockquote span {
+            display: block;
+            font-style: italic;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        blockquote span:before {
+            content: '~ ';
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .lang-picker {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background: white;
+            padding: 5px;
+            color: black
+        }
+
+        .flag {
+            font-size: 20px;
+        }
+
+        .flag:hover {
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.32.0/tsparticles.min.js"></script>
+</head>
+<body>
+<div class="lang-picker">
+    <span class="flag" data-lang="de">🇩🇪</span> | <span class="flag" data-lang="en">🇬🇧</span>
+</div>
+<!-- tsParticles container -->
+<div id="particles"></div>
+<div id="dialogBox">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 777 480">
+        <path fill="#770088" d="M0 0h777v480H0z"/>
+        <path fill="#004CFF" d="M0 0h777v400H0z"/>
+        <path fill="#028121" d="M0 0h777v320H0z"/>
+        <path fill="#FFEE00" d="M0 0h777v240H0z"/>
+        <path fill="#FF8D00" d="M0 0h777v160H0z"/>
+        <path fill="#E50000" d="M0 0h777v80H0z"/>
+    </svg>
+    <div class="content-div de">
+        <h1>Willkommen in der <span class="rainbow-text">Rainbow</span>-WG!</h1>
+        <p>
+            Mit dem Zugriff auf das Gäste-WLAN stimmst du dem <a
+                href="https://de.wikipedia.org/wiki/Manifest_der_Kommunistischen_Partei">Manifest der kommunistischen
+            Partei</a> zu.
+        </p>
+        <blockquote>
+            <p>
+                Sie ist mehr als nur eine bunte Fahne: Seit den späten 1970er Jahren ist die Regenbogenflagge Symbol für
+                die Akzeptanz und Gleichberechtigung von Menschen, die sich nicht mit dem traditionellen Rollenbild von
+                Mann und Frau oder anderen Normen rund um Geschlecht und Sexualität identifizieren.
+                <br/>
+                Repräsentiert sehen
+                sich von der Flagge etwa Lesben, Schwule, Bisexuelle sowie non-binäre und transsexuelle Menschen.
+            </p>
+            <span><a
+                    href="https://www.t-online.de/leben/liebe/id_90304168/bedeutung-der-regenbogenflagge-dafuer-stehen-die-farben-.html">t-online</a> </span>
+        </blockquote>
+    </div>
+    <div class="content-div en hidden">
+        <h1>Welcome in the <span class="rainbow-text">Rainbow</span>-WG!</h1>
+        <p> By accessing the guest WLAN you agree to the
+            <a
+                    href="https://en.wikipedia.org/wiki/The_Communist_Manifesto">The Communist Manifesto</a> zu.
+        </p>
+        <blockquote>
+            <p>
+                It is more than just a colorful flag: Since the late 1970s, the rainbow flag has been a symbol of
+                acceptance and equality for people who do not identify with the traditional role model of man and woman
+                or other norms around gender and sexuality.
+                <br/>
+                Lesbians, gays, bisexuals, non-binary and transgender people, for example, see themselves represented by
+                the flag.
+            </p>
+            <span><a
+                    href="https://www.t-online.de/leben/liebe/id_90304168/bedeutung-der-regenbogenflagge-dafuer-stehen-die-farben-.html">t-online</a> </span>
+        </blockquote>
+    </div>
+</div>
+<script>
+    const isGermanClient = () => navigator.language.startsWith("de");
+    const showContentInLang = (language) => {
+        let contentElement = document.querySelector(`.${language}`);
+        if (!contentElement) {
+            throw 'Language is not supported';
+        }
+        document.querySelectorAll(".content-div")
+            .forEach(el => el.classList.add("hidden"));
+        contentElement.classList.remove("hidden");
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".flag")
+            .forEach(el => {
+                const lang = el.dataset.lang;
+                el.title = `Show site in ${lang}`;
+                el.addEventListener("click", () => showContentInLang(lang));
+            });
+
+        showContentInLang(isGermanClient() ? "de" : "en");
+    });
+
+    tsParticles.load("particles", {
+        backgroundMask: {
+            enable: true,
+            cover: {
+                value: {
+                    r: 0,
+                    g: 0,
+                    b: 0
+                }
+            }
+        },
+        background: {
+            image:
+                "linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,154,0,1) 10%, rgba(208,222,33,1) 20%, rgba(79,220,74,1) 30%, rgba(63,218,216,1) 40%, rgba(47,201,226,1) 50%, rgba(28,127,238,1) 60%, rgba(95,21,242,1) 70%, rgba(186,12,248,1) 80%, rgba(251,7,217,1) 90%, rgba(255,0,0,1) 100%)",
+            size: "100% 100%",
+            repeat: "no-repeat"
+        },
+        fullScreen: {
+            enable: true,
+            zIndex: -1
+        },
+        particles: {
+            color: {
+                value: "#000000",
+                animation: {
+                    enable: true,
+                    speed: 30
+                }
+            },
+            move: {
+                direction: "bottom",
+                enable: true,
+                outModes: {
+                    default: "out"
+                },
+                size: true,
+                speed: {
+                    min: 1,
+                    max: 3
+                }
+            },
+            number: {
+                value: 500,
+                density: {
+                    enable: true,
+                    area: 800
+                }
+            },
+            opacity: {
+                value: 1,
+                animation: {
+                    enable: false,
+                    startValue: "max",
+                    destroy: "min",
+                    speed: 0.3,
+                    sync: true
+                }
+            },
+            rotate: {
+                value: {
+                    min: 0,
+                    max: 360
+                },
+                direction: "random",
+                move: true,
+                animation: {
+                    enable: true,
+                    speed: 60
+                }
+            },
+            tilt: {
+                direction: "random",
+                enable: true,
+                move: true,
+                value: {
+                    min: 0,
+                    max: 360
+                },
+                animation: {
+                    enable: true,
+                    speed: 60
+                }
+            },
+            shape: {
+                type: ["triangle", "circle", "square"]
+            },
+            size: {
+                value: {
+                    min: 3,
+                    max: 5
+                }
+            },
+            roll: {
+                darken: {
+                    enable: true,
+                    value: 30
+                },
+                enlighten: {
+                    enable: true,
+                    value: 30
+                },
+                enable: true,
+                speed: {
+                    min: 15,
+                    max: 25
+                }
+            },
+            wobble: {
+                distance: 30,
+                enable: true,
+                move: true,
+                speed: {
+                    min: -15,
+                    max: 15
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>
