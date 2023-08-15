@@ -8,6 +8,11 @@
     <link rel="icon" href="favicon.ico">
     <meta charset="utf8">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
         html, body {
             height: 100%;
         }
@@ -20,7 +25,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
             color: white;
+            line-height: 1.4;
+            font-size: 100%;
         }
 
         canvas {
@@ -31,12 +39,24 @@
         #dialogBox {
             background: rgb(77 77 72 / 60%);
             backdrop-filter: blur(6px);
-            padding: 40px;
-            margin: 90px;
+            padding: 10px;
             display: flex;
             align-items: center;
             border-radius: 10px;
             width: 60vw;
+            flex-grow: 0;
+        }
+
+        @media (max-width: 800px) {
+
+            #dialogBox {
+                width: 90vw;
+                flex-direction: column;
+            }
+
+            #dialogBox svg {
+                max-height: 10em;
+            }
         }
 
         #dialogBox > * {
@@ -47,12 +67,6 @@
             display: block;
             max-height: 15em;
             border-radius: 10px;
-        }
-
-        @media (max-width: 500px) {
-            #dialogBox {
-                flex-direction: column;
-            }
         }
 
         a, .rainbow-text {
@@ -101,9 +115,6 @@
         }
 
         .lang-picker {
-            position: fixed;
-            top: 10px;
-            right: 10px;
             background: rgb(255 255 255 / 30%);
             padding: 10px;
             color: black;
@@ -112,6 +123,7 @@
             align-items: center;
             width: 50px;
             justify-content: center;
+            align-self: end;
         }
 
         .flag {
@@ -129,6 +141,29 @@
             transform: scale(140%);
             font-size: 25px;
         }
+
+        .spacer {
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 500;
+            line-height: 1.25;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
 </head>
@@ -136,6 +171,7 @@
 <div class="lang-picker">
     <span class="flag" data-lang="de">🇩🇪</span> <span class="flag" data-lang="en">🇬🇧</span>
 </div>
+<div class="spacer"></div>
 <!-- tsParticles container -->
 <div id="particles"></div>
 <div id="dialogBox">
@@ -150,15 +186,17 @@
     <div class="content-div de">
         <h1>Willkommen in der <span class="rainbow-text">Rainbow</span>-WG!</h1>
         <p>
-            Mit dem Zugriff auf das Gäste-WLAN stimmst du dem <a
+            Mit dem Zugriff auf das Gäste-WLAN stimmst du vielleicht dem <a
                 href="https://de.wikipedia.org/wiki/Manifest_der_Kommunistischen_Partei">Manifest der kommunistischen
             Partei</a> zu.
         </p>
-        <h1>Hausregeln</h1>
+        <h2>Hausregeln</h2>
         <p>
-            Die aktuellen Hausregeln findest du in <a href="https://docs.google.com/document/d/1wVV132y8KvyI8-B0TQ8DlwPtDl6lXLGk/edit?usp=sharing&ouid=118124486478757822167&rtpof=true&sd=true">Google Docs</a>. Bitte lese diese sorgfältig!
+            Die aktuellen Hausregeln findest du in <a
+                href="https://docs.google.com/document/d/1wVV132y8KvyI8-B0TQ8DlwPtDl6lXLGk/edit?usp=sharing&ouid=118124486478757822167&rtpof=true&sd=true">Google
+            Docs</a>. Bitte lese diese sorgfältig!
         </p>
-        <h1>Für was steht die Regenbogen-Flagge?</h1>
+        <h2>Für was steht die Regenbogen-Flagge?</h2>
         <blockquote>
             <p>
                 Sie ist mehr als nur eine bunte Fahne: Seit den späten 1970er Jahren ist die Regenbogenflagge Symbol für
@@ -174,15 +212,17 @@
     </div>
     <div class="content-div en hidden">
         <h1>Welcome in the <span class="rainbow-text">Rainbow</span>-WG!</h1>
-        <p> By accessing the guest WLAN you agree to the
+        <p> By accessing the guest WLAN you might agree to the
             <a
                     href="https://en.wikipedia.org/wiki/The_Communist_Manifesto">The Communist Manifesto</a>.
         </p>
-        <h1> House rules</h1>
+        <h2> House rules</h2>
         <p>
-            You can find the up to date house rules in <a href="https://docs.google.com/document/d/1vv4CM3sJ-aXRMf1Ri8FgtpukRhGSr5qW/edit?usp=drive_link">Google Docs</a>. Please read them carefully!
+            You can find the up to date house rules in <a
+                href="https://docs.google.com/document/d/1vv4CM3sJ-aXRMf1Ri8FgtpukRhGSr5qW/edit?usp=drive_link">Google
+            Docs</a>. Please read them carefully!
         </p>
-        <h1>What is the rainbow flag about?</h1>
+        <h2>What is the rainbow flag about?</h2>
         <blockquote>
             <p>
                 It is more than just a colorful flag: Since the late 1970s, the rainbow flag has been a symbol of
@@ -198,6 +238,7 @@
 
     </div>
 </div>
+<div class="spacer"></div>
 <script>
     const isGermanClient = () => navigator.language.startsWith("de");
     const showContentInLang = (language) => {
